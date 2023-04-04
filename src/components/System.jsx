@@ -1,5 +1,9 @@
-import { CheckIcon } from '@heroicons/react/20/solid'
+import { frontEndRedirect } from '@/utils/front-end-redirect'
 
+import { GetServerSideProps } from 'next'
+import { useSession, getSession } from "next-auth/react"
+
+import { CheckIcon } from '@heroicons/react/20/solid'
 
 const includedFeatures = [
     'Private forum access',
@@ -9,6 +13,17 @@ const includedFeatures = [
   ]
   
   export default function System() {
+    const { data: session, loading } = useSession()
+    
+    if(!session && !loading) {
+      return frontEndRedirect()
+    }
+    
+    if (typeof window !== 'undefined' && loading) return null
+    
+    if(!session){
+      return 'null'
+    }
     return (
       <div className="bg-white py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -18,6 +33,17 @@ const includedFeatures = [
               Distinctio et nulla eum soluta et neque labore quibusdam. Saepe et quasi iusto modi velit ut non voluptas
               in. Explicabo id ut laborum.
             </p>
+            {session &&
+              <p className="mt-2 text-lg font-semibold leading-8 text-gray-600">
+                Usuário: <span className='font-normal'>{session.user.name}</span>
+              </p>
+              }
+              
+              {session &&
+              <p className="mt-2 text-lg font-semibold leading-8 text-gray-600">
+                Username: <span className='font-normal'>{session.user.username}</span>
+              </p>
+            }
           </div>
           <div className="mx-auto mt-16 max-w-2xl rounded-3xl ring-1 ring-gray-200 sm:mt-20 lg:mx-0 lg:flex lg:max-w-none">
             <div className="p-8 sm:p-10 lg:flex-auto">
@@ -67,4 +93,6 @@ const includedFeatures = [
       </div>
     )
   }
+
+
   

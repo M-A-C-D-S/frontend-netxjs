@@ -1,29 +1,38 @@
 import { LockClosedIcon } from '@heroicons/react/20/solid'
-import {NextAuth} from "../pages/api/auth/[...nextauth]"
-import {signIn} from "next-auth/react"
+import { NextAuth } from "../pages/api/auth/[...nextauth]"
+import { signIn, useSession } from "next-auth/react"
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 
 
 export default function Login() {
-  const [userInfo, setUserInfo] = useState({email: "", password: ""})
+  const { data: session, loading } = useSession()
+
   const Router = useRouter()
-  const handleSubmit = async(e)=>{
+  
+  const [error, setError] = useState("")
+  const [userInfo, setUserInfo] = useState({email: "", password: ""})
+
+  
+  const handleSubmit = async(e, email, password)=>{
     e.preventDefault()
 
-    const res = await signIn('credentials', {
+    const response = await signIn('credentials', {
       redirect: false, 
       email: userInfo.email, 
       password: userInfo.password
     })
-    console.log(res)
-    console.log(res.email)
-    if(res.ok){
-      Router.push("/system")
-    } else {
-      console.log(res?.error)
-    }
+
+    if(!response.ok){
+      console.log("Usuário ou senha inválidos")
+      return null
+    } 
+    const redirect = Router.query?.redirect || "/system"
+    Router.push(redirect)
+
   }
+
+  
   return (
     <>
       <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -50,7 +59,7 @@ export default function Login() {
                   type="email"
                   autoComplete="email"
                   required
-                  className="relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:px-4 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="relative block w-full rounded-t-md border-0 px-3 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:px-4 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   placeholder="Email"
                   value={userInfo.email}
                   onChange={({target})=>{
@@ -68,7 +77,7 @@ export default function Login() {
                   type="password"
                   autoComplete="current-password"
                   required
-                  className="relative block w-full rounded-b-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:px-4 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="relative block w-full rounded-b-md border-0 px-3 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:px-4 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   placeholder="Senha"
                   value={userInfo.password}
                   onChange={({target})=>{

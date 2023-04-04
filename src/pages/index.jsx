@@ -1,6 +1,8 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Navbar from "../components/Navbar"
+import {GetServerSideProps} from 'next'
+import { useSession } from 'next-auth/react'
 
 import { Inter } from 'next/font/google'
 
@@ -91,7 +93,7 @@ export default function Home() {
         <div className="bg-white py-24 sm:py-32">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto max-w-2xl lg:mx-0">
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">From the blog</h2>
+              <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Tests Next Auth from NextJS</h2>
               <p className="mt-2 text-lg leading-8 text-gray-600">
                 Learn how to grow your business with our expert advice.
               </p>
@@ -141,8 +143,9 @@ export default function Home() {
   )
 }
 
-// export const getServerSideProps = async () =>{
-//   console.log(process.env.DB_HOST)
+// export async function getServerSideProps(context){
+//   console.log('ABCD')
+
 //   return {
 //     props: {}
 //   }

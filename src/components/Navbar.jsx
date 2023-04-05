@@ -102,7 +102,7 @@ export default function Navbar() {
                       <span className="sr-only">Open user menu</span>
                       <Image
                         className="h-8 w-8 rounded-full"
-                        src=""
+                        src="https://semeandoafeto.imadel.org.br/packages/trustir/exclusiva/img/user_placeholder.png"
                         alt=""
                         width={30}
                         height={30}

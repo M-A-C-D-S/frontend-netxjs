@@ -1,8 +1,3 @@
-import { frontEndRedirect } from '@/utils/front-end-redirect'
-
-import { GetServerSideProps } from 'next'
-import { useSession } from "next-auth/react"
-
 import { CheckIcon } from '@heroicons/react/20/solid'
 
 const includedFeatures = [
@@ -12,21 +7,7 @@ const includedFeatures = [
     'Official member t-shirt',
   ]
   
-  export default function System() {
-    const { data: session, status } = useSession()
-    if(!session && !status) {
-      return frontEndRedirect()
-    }
-
-    if (status === "loading") {
-      return <p>Loading...</p>
-    }
-    
-    // if (typeof window !== 'undefined' && status) return null
-    
-    if(!session){
-      return frontEndRedirect()
-    }
+  export default function System(session) {
     return (
       <div className="bg-white py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -36,17 +17,17 @@ const includedFeatures = [
               Distinctio et nulla eum soluta et neque labore quibusdam. Saepe et quasi iusto modi velit ut non voluptas
               in. Explicabo id ut laborum.
             </p>
-            {session &&
+            
               <p className="mt-2 text-lg font-semibold leading-8 text-gray-600">
-                Usuário: <span className='font-normal'>{session.user.name}</span>
+                Usuário: <span className='font-normal'>{session.name}</span>
               </p>
-              }
               
-              {session &&
+              
+              
               <p className="mt-2 text-lg font-semibold leading-8 text-gray-600">
-                Username: <span className='font-normal'>{session.user.username}</span>
+                Username: <span className='font-normal'>{session.username}</span>
               </p>
-            }
+            
           </div>
           <div className="mx-auto mt-16 max-w-2xl rounded-3xl ring-1 ring-gray-200 sm:mt-20 lg:mx-0 lg:flex lg:max-w-none">
             <div className="p-8 sm:p-10 lg:flex-auto">

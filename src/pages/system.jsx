@@ -3,9 +3,24 @@ import System from "../components/System"
 import Navbar from "../components/Navbar"
 import { useSession, getSession } from "next-auth/react"
 import { serverSideRedirect } from '@/utils/server-side-redirect'
+import { frontEndRedirect } from '@/utils/front-end-redirect'
 
 export default function SystemPage(){
-  // const { data: session, loading } = useSession()
+  const { data: session, status } = useSession()
+
+  if(!session && !status) {
+    return frontEndRedirect()
+  }
+
+  if (status === "loading") {
+    return <p>Loading...</p>
+  }
+  
+  // if (typeof window !== 'undefined' && status) return null
+  
+  if(!session){
+    return frontEndRedirect()
+  }
   return(
     <>
       <Head>
@@ -15,10 +30,9 @@ export default function SystemPage(){
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar />
-      {/* {session &&
-      session.user.name
-      } */}
-      <System />
+      {session &&
+      <System name={session.user.name} username={session.user.username}/>
+      }
     </>
   )
 }

@@ -5,6 +5,7 @@ import { useSession, getSession } from "next-auth/react"
 import { serverSideRedirect } from '@/utils/server-side-redirect'
 
 export default function SystemPage(){
+  // const { data: session, loading } = useSession()
   return(
     <>
       <Head>
@@ -14,16 +15,18 @@ export default function SystemPage(){
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar />
+      {/* {session &&
+      session.user.name
+      } */}
       <System />
     </>
   )
 }
 
 export async function getServerSideProps(context){
-  const { data: session } = await getSession(context)
+  const session = await getSession(context)
   
   if(!session){
-    console.log('REDIRECT')
     return serverSideRedirect(context)
   }
 

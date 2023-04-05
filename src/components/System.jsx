@@ -1,7 +1,7 @@
 import { frontEndRedirect } from '@/utils/front-end-redirect'
 
 import { GetServerSideProps } from 'next'
-import { useSession, getSession } from "next-auth/react"
+import { useSession } from "next-auth/react"
 
 import { CheckIcon } from '@heroicons/react/20/solid'
 
@@ -13,16 +13,19 @@ const includedFeatures = [
   ]
   
   export default function System() {
-    const { data: session, loading } = useSession()
-    
-    if(!session && !loading) {
+    const { data: session, status } = useSession()
+    if(!session && !status) {
       return frontEndRedirect()
     }
+
+    if (status === "loading") {
+      return <p>Loading...</p>
+    }
     
-    if (typeof window !== 'undefined' && loading) return null
+    // if (typeof window !== 'undefined' && status) return null
     
     if(!session){
-      return 'null'
+      return frontEndRedirect()
     }
     return (
       <div className="bg-white py-24 sm:py-32">

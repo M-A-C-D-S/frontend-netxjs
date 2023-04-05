@@ -80,6 +80,8 @@ const posts = [
 ]
 
 export default function Home() {
+  const { data: session, status } = useSession()
+
   return (
     <>
       <Head>
@@ -97,6 +99,10 @@ export default function Home() {
               <p className="mt-2 text-lg leading-8 text-gray-600">
                 Learn how to grow your business with our expert advice.
               </p>
+              {session ? (
+              <div>{session.user.name}</div>
+              ) : (<div></div>)
+              } 
             </div>
             <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-y-16 gap-x-8 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
               {posts.map((post) => (
